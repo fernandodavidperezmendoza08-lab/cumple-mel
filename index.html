@@ -186,6 +186,7 @@
     margin: 5px;
   }
 
+  /* -------- Carrusel -------- */
   .carrusel {
     width: 280px;
     height: 180px;
@@ -223,6 +224,7 @@
   .flecha.izq { left: 8px; }
   .flecha.der { right: 8px; }
 
+  /* -------- Corazones flotando -------- */
   .corazon {
     position: fixed;
     bottom: -10px;
@@ -276,181 +278,198 @@
     <div class="mensajes" id="mensajes"></div>
   </div>
 
-  <script>
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value.toLowerCase().trim();
-      if (input === "mel") {
-        document.getElementById("passwordScreen").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-        actualizarCarrusel();
-        iniciarCorazones();
-      } else {
-        document.getElementById("errorText").style.display = "block";
-      }
-    }
+<script>
 
-    /* --- CARGAR MENSAJES GUARDADOS --- */
-    let mensajes = JSON.parse(localStorage.getItem("mensajesMelanny")) || [];
+/* ------------------- CONTRASEÑA ------------------- */
+function checkPassword() {
+  const input = document.getElementById("passwordInput").value.toLowerCase().trim();
+  if (input === "mel") {
+    document.getElementById("passwordScreen").style.display = "none";
+    document.getElementById("mainContent").style.display = "block";
+    actualizarCarrusel();
+    iniciarCorazones();
+  } else {
+    document.getElementById("errorText").style.display = "block";
+  }
+}
 
-    /* --- AGREGAR MENSAJES FIJOS (NO BORRAR) --- */
-    const fijos = [
-      {
-        id: 1001,
-        nombre: "Nayeli",
-        mensaje: `Bueno mi querida Mel, mi tocaya de segundo nombre jasjajsa, sabes que ya van varios años desde que nos conocemossss y somos amigassss, desde el momento en que te conocí, me caíste súper bien,transmites una vibra hermosa, eres súper chévere y, sobre todo, muy divertida. Tienes mi mismo humor, esa esencia que solo tú tienes, somos full raje cuando estamos con Daniele, los brosters, y siempre nos terminamos matando de risa.
-Me alegra muchísimo ser tu amiga, de verdad. Espero que disfrutes este momento porque es una sorpresa de parte de tus amigas, ya sabes, tus amigas incondicionales. Sabes lo mucho que te quiero y lo especial que eres para mí, puede contar siempre conmigo✨.
+/* ------------------- MENSAJES FIJOS ------------------- */
+
+const fijos = [
+    {
+      id: 1001,
+      nombre: "Nayeli",
+      mensaje: `Bueno mi querida Mel, mi tocaya de segundo nombre jasjajsa, sabes que ya van varios años desde que nos conocemossss y somos amigassss, desde el momento en que te conocí, me caíste súper bien, transmites una vibra hermosa, eres súper chévere y, sobre todo, muy divertida. Tienes mi mismo humor, esa esencia que solo tú tienes, somos full raje cuando estamos con Daniele, los brosters, y siempre nos terminamos matando de risa.
+Me alegra muchísimo ser tu amiga, de verdad. Espero que disfrutes este momento porque es una sorpresa de parte de tus amigas, ya sabes, tus amigas incondicionales. Sabes lo mucho que te quiero y lo especial que eres para mí, puedes contar siempre conmigo✨.
 Te mereces lo mejor del mundo Melanny, estas son solo las previas a tu cumpleaños, pero igual deseo que la pases súper bien, que nos podamos divertir un montón y que sigas brillando como siempre.🎂🎉🫶🏻`,
-        imagen: "https://files.catbox.moe/og9rmq.jpeg"
-      },
-      {
-        id: 1002,
-        nombre: "Juleyssi",
-        mensaje: "Mi Mel, gracias por ser una buena amiga, y nunca juzgar. Nunca cambies y sabes que siempre te deseo felicidad y éxito en tu vida 🩷🙌🏻",
-        imagen: "https://files.catbox.moe/avo1fq.jpeg"
-      },
-      {
-        id: 1003,
-        nombre: "Lucero",
-        mensaje: `Holaaaaa mi Melanny pimpolla feliz cumpleaños adelantado JAJA, a pesar que fue corto el tiempo que nos conocimos eres una gran amiga, divertida, media loquita y la petisa del grupo xd, gracias por todas las risas compartidas y más aún cuando nos vacilas diciendo que llegarás temprano no es verdad.
-Me alegra mucho haberte conocido espero que la pases increíble, sabes qué cuentas conmigo para cualquier cosita menos billullo por que ahí si estoy igual que tú xdddd`,
-        imagen: "https://files.catbox.moe/pgzv0t.jpeg"
-      }
-    ];
+      imagen: "https://files.catbox.moe/og9rmq.jpeg"
+    },
+    {
+      id: 1002,
+      nombre: "Juleyssi",
+      mensaje: `Mi Mel, gracias por ser una buena amiga, y nunca juzgar. Nunca cambies y sabes que siempre te deseo felicidad y éxito en tu vida 🩷🙌🏻`,
+      imagen: "https://files.catbox.moe/avo1fq.jpeg"
+    },
+    {
+      id: 1003,
+      nombre: "Lucero",
+      mensaje: `Holaaaaa mi Melanny pimpolla feliz cumpleaños adelantado JAJA, a pesar que fue corto el tiempo que nos conocimos eres una gran amiga, divertida, media loquita y la petisa del grupo xd, gracias por todas las risas compartidas y más aún cuando nos vacilas diciendo que llegarás temprano no es verdad.
+Me alegra mucho haberte conocido espero que la pases increíble, sabes qué cuentas conmigo para cualquier cosita menos billullo porque ahí sí estoy igual que tú xdddd`,
+      imagen: "https://files.catbox.moe/pgzv0t.jpeg"
+    },
+    {
+      id: 1004,
+      nombre: "Amiga 💗",
+      mensaje: `Feliz cumpleaños mujer, sé que a veces no hablamos mucho pero eso no cambia el hecho de que te quiera con todo mi corazón. Por más años juntas en amistad, sigue así nunca cambies te amo mucho ❤️  
+(No soy buena para escribir) jssjsjsjsjs`,
+      imagen: null
+    }
+];
 
-    /* --- EVITAR DUPLICADOS SI YA EXISTEN EN LOCALSTORAGE --- */
-    fijos.forEach(f => {
-      if (!mensajes.some(m => m.id === f.id)) {
-        mensajes.unshift(f);
-      }
-    });
+/* ------------------ MENSAJES NORMALES ------------------ */
 
+let mensajes = JSON.parse(localStorage.getItem("mensajesMelanny")) || [];
+
+function agregarMensaje() {
+  const nombre = document.getElementById("nombre").value.trim();
+  const mensaje = document.getElementById("mensaje").value.trim();
+  const foto = document.getElementById("foto").files[0];
+
+  if (!nombre || !mensaje) {
+    alert("Por favor completa tu nombre y mensaje 💕");
+    return;
+  }
+
+  if (foto) {
+    const lector = new FileReader();
+    lector.onload = e => {
+      const nuevo = { id: Date.now(), nombre, mensaje, imagen: e.target.result };
+      guardarMensaje(nuevo);
+    };
+    lector.readAsDataURL(foto);
+  } else {
+    const nuevo = { id: Date.now(), nombre, mensaje, imagen: null };
+    guardarMensaje(nuevo);
+  }
+}
+
+function guardarMensaje(m) {
+  mensajes.push(m);
+  localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
+  mostrarMensajes();
+  actualizarCarrusel();
+  document.getElementById("nombre").value = "";
+  document.getElementById("mensaje").value = "";
+  document.getElementById("foto").value = "";
+}
+
+function mostrarMensajes() {
+  const cont = document.getElementById("mensajes");
+  cont.innerHTML = "";
+
+  // mensajes fijos primero
+  fijos.forEach(m => {
+    const div = document.createElement("div");
+    div.classList.add("mensaje");
+    div.innerHTML = `
+      <h3>${m.nombre} 💕</h3>
+      <p>${m.mensaje}</p>
+    `;
+    cont.appendChild(div);
+  });
+
+  // luego los mensajes que escribe la gente
+  mensajes.forEach(m => {
+    const div = document.createElement("div");
+    div.classList.add("mensaje");
+    div.setAttribute("data-id", m.id);
+    div.innerHTML = `
+      <h3>${m.nombre} 💕</h3>
+      <p>${m.mensaje}</p>
+      <div class="acciones">
+        <button onclick="editarMensaje(${m.id})">Editar</button>
+        <button onclick="borrarMensaje(${m.id})">Borrar</button>
+      </div>`;
+    cont.appendChild(div);
+  });
+}
+
+function editarMensaje(id) {
+  const nuevo = prompt("Edita tu mensaje:");
+  if (nuevo) {
+    const i = mensajes.findIndex(m => m.id === id);
+    mensajes[i].mensaje = nuevo;
     localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
+    mostrarMensajes();
+  }
+}
 
-    function agregarMensaje() {
-      const nombre = document.getElementById("nombre").value.trim();
-      const mensaje = document.getElementById("mensaje").value.trim();
-      const foto = document.getElementById("foto").files[0];
+function borrarMensaje(id) {
+  if (confirm("¿Seguro que quieres borrar este mensaje?")) {
+    mensajes = mensajes.filter(m => m.id !== id);
+    localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
+    mostrarMensajes();
+    actualizarCarrusel();
+  }
+}
 
-      if (!nombre || !mensaje) {
-        alert("Por favor completa tu nombre y mensaje 💕");
-        return;
-      }
+/* ------------------- CARRUSEL ------------------- */
 
-      if (foto) {
-        const lector = new FileReader();
-        lector.onload = e => {
-          const nuevo = { id: Date.now(), nombre, mensaje, imagen: e.target.result };
-          guardarMensaje(nuevo);
-        };
-        lector.readAsDataURL(foto);
-      } else {
-        const nuevo = { id: Date.now(), nombre, mensaje, imagen: null };
-        guardarMensaje(nuevo);
-      }
-    }
+let indiceCarrusel = 0;
+let intervaloCarrusel;
 
-    function guardarMensaje(m) {
-      mensajes.push(m);
-      localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
-      mostrarMensajes();
-      actualizarCarrusel();
+function actualizarCarrusel() {
+  const cont = document.getElementById("carrusel");
+  cont.innerHTML = `<button class='flecha izq' onclick='moverCarrusel(-1)'>❮</button>
+                    <button class='flecha der' onclick='moverCarrusel(1)'>❯</button>`;
 
-      document.getElementById("nombre").value = "";
-      document.getElementById("mensaje").value = "";
-      document.getElementById("foto").value = "";
-    }
+  const fotosFijas = fijos.filter(m => m.imagen).map(m => m.imagen);
+  const fotosUsuarios = mensajes.filter(m => m.imagen).map(m => m.imagen);
 
-    function mostrarMensajes() {
-      const cont = document.getElementById("mensajes");
-      cont.innerHTML = "";
+  const fotos = [...fotosFijas, ...fotosUsuarios];
 
-      mensajes.forEach(m => {
-        const div = document.createElement("div");
-        div.classList.add("mensaje");
-        div.setAttribute("data-id", m.id);
+  if (fotos.length === 0) { 
+    cont.style.display = "none"; 
+    return; 
+  }
 
-        div.innerHTML = `
-          <h3>${m.nombre} 💕</h3>
-          <p>${m.mensaje.replace(/\n/g, "<br>")}</p>
-          ${m.imagen ? `<img src="${m.imagen}" style="width:100%;border-radius:10px;margin-top:10px;">` : ""}
-          <div class="acciones">
-            <button onclick="editarMensaje(${m.id})">Editar</button>
-            <button onclick="borrarMensaje(${m.id})">Borrar</button>
-          </div>`;
+  fotos.forEach((img, i) => {
+    const im = document.createElement("img");
+    im.src = img;
+    if (i === 0) im.classList.add("active");
+    cont.appendChild(im);
+  });
 
-        cont.appendChild(div);
-      });
-    }
+  cont.style.display = "block";
 
-    function editarMensaje(id) {
-      const nuevo = prompt("Edita tu mensaje:");
-      if (nuevo) {
-        const i = mensajes.findIndex(m => m.id === id);
-        mensajes[i].mensaje = nuevo;
-        localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
-        mostrarMensajes();
-      }
-    }
+  if (intervaloCarrusel) clearInterval(intervaloCarrusel);
+  intervaloCarrusel = setInterval(() => moverCarrusel(1), 4000);
+}
 
-    function borrarMensaje(id) {
-      if (confirm("¿Seguro que quieres borrar este mensaje?")) {
-        mensajes = mensajes.filter(m => m.id !== id);
-        localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
-        mostrarMensajes();
-        actualizarCarrusel();
-      }
-    }
+function moverCarrusel(dir) {
+  const imgs = document.querySelectorAll(".carrusel img");
+  if (imgs.length === 0) return;
+  imgs[indiceCarrusel].classList.remove("active");
+  indiceCarrusel = (indiceCarrusel + dir + imgs.length) % imgs.length;
+  imgs[indiceCarrusel].classList.add("active");
+}
 
-    let indiceCarrusel = 0;
-    let intervaloCarrusel;
+/* ------------------- CORAZONES ------------------- */
+function iniciarCorazones() {
+  setInterval(() => {
+    const corazon = document.createElement("div");
+    corazon.classList.add("corazon");
+    corazon.textContent = "💖";
+    corazon.style.left = Math.random() * 100 + "vw";
+    corazon.style.fontSize = (12 + Math.random() * 10) + "px";
+    document.body.appendChild(corazon);
+    setTimeout(() => corazon.remove(), 6000);
+  }, 400);
+}
 
-    function actualizarCarrusel() {
-      const cont = document.getElementById("carrusel");
-      cont.innerHTML = `
-        <button class='flecha izq' onclick='moverCarrusel(-1)'>❮</button>
-        <button class='flecha der' onclick='moverCarrusel(1)'>❯</button>`;
+window.onload = mostrarMensajes;
 
-      const fotos = mensajes.filter(m => m.imagen).map(m => m.imagen);
-      if (fotos.length === 0) {
-        cont.style.display = "none";
-        return;
-      }
+</script>
 
-      fotos.forEach((img, i) => {
-        const im = document.createElement("img");
-        im.src = img;
-        if (i === 0) im.classList.add("active");
-        cont.appendChild(im);
-      });
-
-      cont.style.display = "block";
-
-      if (intervaloCarrusel) clearInterval(intervaloCarrusel);
-      intervaloCarrusel = setInterval(() => moverCarrusel(1), 4000);
-    }
-
-    function moverCarrusel(dir) {
-      const imgs = document.querySelectorAll(".carrusel img");
-      if (imgs.length === 0) return;
-      imgs[indiceCarrusel].classList.remove("active");
-      indiceCarrusel = (indiceCarrusel + dir + imgs.length) % imgs.length;
-      imgs[indiceCarrusel].classList.add("active");
-    }
-
-    function iniciarCorazones() {
-      setInterval(() => {
-        const corazon = document.createElement("div");
-        corazon.classList.add("corazon");
-        corazon.textContent = "💖";
-        corazon.style.left = Math.random() * 100 + "vw";
-        corazon.style.fontSize = (12 + Math.random() * 10) + "px";
-        document.body.appendChild(corazon);
-        setTimeout(() => corazon.remove(), 6000);
-      }, 400);
-    }
-
-    window.onload = mostrarMensajes;
-  </script>
 </body>
 </html>
-
