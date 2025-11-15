@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;600&family=Comic+Neue:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
-  /* -------- Pantalla de bloqueo (oscura con Sour Gummy) -------- */
   :root {
     --bg: #0a0a0f;
     --fg: #ffffff;
@@ -27,15 +26,8 @@
     font-family: 'Sour Gummy', cursive;
   }
 
-  .left {
-    width: 40%;
-  }
-
-  .left img {
-    width: 100%;
-    height: 100vh;
-    object-fit: cover;
-  }
+  .left { width: 40%; }
+  .left img { width: 100%; height: 100vh; object-fit: cover; }
 
   .right {
     width: 60%;
@@ -48,11 +40,7 @@
     text-align: center;
   }
 
-  .right h2 {
-    font-size: 2.2em;
-    text-shadow: var(--textGlow);
-    margin-bottom: 1em;
-  }
+  .right h2 { font-size: 2.2em; text-shadow: var(--textGlow); margin-bottom: 1em; }
 
   .right input {
     padding: 0.7em 1em;
@@ -78,18 +66,10 @@
     transition: 0.3s;
   }
 
-  .right button:hover {
-    background-color: #ff4d72;
-    transform: scale(1.05);
-  }
+  .right button:hover { background-color: #ff4d72; transform: scale(1.05); }
 
-  #errorText {
-    color: #ffbaba;
-    margin-top: 1em;
-    display: none;
-  }
+  #errorText { color: #ffbaba; margin-top: 1em; display: none; }
 
-  /* -------- Página principal (rosadita) -------- */
   body {
     margin: 0;
     background-color: #ffe6f2;
@@ -99,16 +79,9 @@
     overflow-x: hidden;
   }
 
-  #mainContent {
-    display: none;
-    padding: 30px;
-  }
+  #mainContent { display: none; padding: 30px; }
 
-  h1 {
-    font-size: 2.3em;
-    color: #cc0066;
-    margin-bottom: 20px;
-  }
+  h1 { font-size: 2.3em; color: #cc0066; margin-bottom: 20px; }
 
   .mensaje-box {
     background-color: white;
@@ -158,12 +131,9 @@
   }
 
   #subirFotoLabel:hover { background-color: #ff55aa; }
-
   #foto { display: none; }
 
-  .mensajes {
-    margin-top: 30px;
-  }
+  .mensajes { margin-top: 30px; }
 
   .mensaje {
     background-color: #fff0f6;
@@ -175,18 +145,10 @@
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
   }
 
-  .mensaje h3 {
-    font-size: 1.3em;
-    color: #cc0066;
-    margin-bottom: 8px;
-  }
+  .mensaje h3 { font-size: 1.3em; color: #cc0066; margin-bottom: 8px; }
 
-  .acciones button {
-    background-color: #ff80bf;
-    margin: 5px;
-  }
+  .acciones button { background-color: #ff80bf; margin: 5px; }
 
-  /* -------- Carrusel pequeño -------- */
   .carrusel {
     width: 280px;
     height: 180px;
@@ -197,13 +159,7 @@
     box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
   }
 
-  .carrusel img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: none;
-  }
-
+  .carrusel img { width: 100%; height: 100%; object-fit: cover; display: none; }
   .carrusel img.active { display: block; }
 
   .flecha {
@@ -224,7 +180,6 @@
   .flecha.izq { left: 8px; }
   .flecha.der { right: 8px; }
 
-  /* -------- Corazones flotando -------- */
   .corazon {
     position: fixed;
     bottom: -10px;
@@ -243,7 +198,6 @@
 </head>
 
 <body>
-  <!-- Pantalla de bloqueo -->
   <div id="passwordScreen">
     <div class="left">
       <img src="https://files.catbox.moe/opg5vs.jpeg" alt="Melanny y besos">
@@ -251,12 +205,11 @@
     <div class="right">
       <h2> PICNIC DE GIRLS PRE CUMPLEAÑOS MEL <3 </h2>
       <input type="password" id="passwordInput" placeholder="Contraseña...">
-      <button onclick="checkPassword()">Entrar 💖</button>
+      <button id="entrarBtn">Entrar 💖</button>
       <p id="errorText">💔 Clave incorrecta 💔</p>
     </div>
   </div>
 
-  <!-- Contenido principal -->
   <div id="mainContent">
     <h1> PALABRAS LINDAS PARA LA CUMPLAÑERA <3 </h1>
 
@@ -279,135 +232,136 @@
   </div>
 
   <script>
-    /* --- Pantalla de acceso --- */
-    function checkPassword() {
-      const input = document.getElementById("passwordInput").value.toLowerCase().trim();
-      if (input === "mel") {
-        document.getElementById("passwordScreen").style.display = "none";
-        document.getElementById("mainContent").style.display = "block";
-        actualizarCarrusel();
-        iniciarCorazones();
-      } else {
-        document.getElementById("errorText").style.display = "block";
-      }
-    }
-
-    /* --- Mensajes y fotos --- */
-    let mensajes = JSON.parse(localStorage.getItem("mensajesMelanny")) || [];
-
-    function agregarMensaje() {
-      const nombre = document.getElementById("nombre").value.trim();
-      const mensaje = document.getElementById("mensaje").value.trim();
-      const foto = document.getElementById("foto").files[0];
-
-      if (!nombre || !mensaje) {
-        alert("Por favor completa tu nombre y mensaje 💕");
-        return;
-      }
-
-      if (foto) {
-        const lector = new FileReader();
-        lector.onload = e => {
-          const nuevo = { id: Date.now(), nombre, mensaje, imagen: e.target.result };
-          guardarMensaje(nuevo);
-        };
-        lector.readAsDataURL(foto);
-      } else {
-        const nuevo = { id: Date.now(), nombre, mensaje, imagen: null };
-        guardarMensaje(nuevo);
-      }
-    }
-
-    function guardarMensaje(m) {
-      mensajes.push(m);
-      localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
+    document.addEventListener("DOMContentLoaded", function() {
       mostrarMensajes();
-      actualizarCarrusel();
-      document.getElementById("nombre").value = "";
-      document.getElementById("mensaje").value = "";
-      document.getElementById("foto").value = "";
-    }
 
-    function mostrarMensajes() {
-      const cont = document.getElementById("mensajes");
-      cont.innerHTML = "";
-      mensajes.forEach(m => {
-        const div = document.createElement("div");
-        div.classList.add("mensaje");
-        div.setAttribute("data-id", m.id);
-        div.innerHTML = `
-          <h3>${m.nombre} 💕</h3>
-          <p>${m.mensaje}</p>
-          <div class="acciones">
-            <button onclick="editarMensaje(${m.id})">Editar</button>
-            <button onclick="borrarMensaje(${m.id})">Borrar</button>
-          </div>`;
-        cont.prepend(div);
-      });
-    }
+      const entrarBtn = document.getElementById("entrarBtn");
+      entrarBtn.addEventListener("click", checkPassword);
 
-    function editarMensaje(id) {
-      const nuevo = prompt("Edita tu mensaje:");
-      if (nuevo) {
-        const i = mensajes.findIndex(m => m.id === id);
-        mensajes[i].mensaje = nuevo;
-        localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
-        mostrarMensajes();
+      function checkPassword() {
+        const input = document.getElementById("passwordInput").value.toLowerCase().trim();
+        if (input === "mel") {
+          document.getElementById("passwordScreen").style.display = "none";
+          document.getElementById("mainContent").style.display = "block";
+          actualizarCarrusel();
+          iniciarCorazones();
+        } else {
+          document.getElementById("errorText").style.display = "block";
+        }
       }
-    }
 
-    function borrarMensaje(id) {
-      if (confirm("¿Seguro que quieres borrar este mensaje?")) {
-        mensajes = mensajes.filter(m => m.id !== id);
+      /* --- Mensajes --- */
+      let mensajes = JSON.parse(localStorage.getItem("mensajesMelanny")) || [];
+
+      window.agregarMensaje = function() {
+        const nombre = document.getElementById("nombre").value.trim();
+        const mensaje = document.getElementById("mensaje").value.trim();
+        const foto = document.getElementById("foto").files[0];
+
+        if (!nombre || !mensaje) { alert("Por favor completa tu nombre y mensaje 💕"); return; }
+
+        if (foto) {
+          const lector = new FileReader();
+          lector.onload = e => {
+            const nuevo = { id: Date.now(), nombre, mensaje, imagen: e.target.result };
+            guardarMensaje(nuevo);
+          };
+          lector.readAsDataURL(foto);
+        } else {
+          const nuevo = { id: Date.now(), nombre, mensaje, imagen: null };
+          guardarMensaje(nuevo);
+        }
+      };
+
+      function guardarMensaje(m) {
+        mensajes.push(m);
         localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
         mostrarMensajes();
         actualizarCarrusel();
+        document.getElementById("nombre").value = "";
+        document.getElementById("mensaje").value = "";
+        document.getElementById("foto").value = "";
       }
-    }
 
-    /* --- Carrusel automático --- */
-    let indiceCarrusel = 0;
-    let intervaloCarrusel;
+      window.mostrarMensajes = function() {
+        const cont = document.getElementById("mensajes");
+        cont.innerHTML = "";
+        mensajes.forEach(m => {
+          const div = document.createElement("div");
+          div.classList.add("mensaje");
+          div.setAttribute("data-id", m.id);
+          div.innerHTML = `
+            <h3>${m.nombre} 💕</h3>
+            <p>${m.mensaje}</p>
+            <div class="acciones">
+              <button onclick="editarMensaje(${m.id})">Editar</button>
+              <button onclick="borrarMensaje(${m.id})">Borrar</button>
+            </div>`;
+          cont.prepend(div);
+        });
+      };
 
-    function actualizarCarrusel() {
-      const cont = document.getElementById("carrusel");
-      cont.innerHTML = `<button class='flecha izq' onclick='moverCarrusel(-1)'>❮</button>
-                        <button class='flecha der' onclick='moverCarrusel(1)'>❯</button>`;
-      const fotos = mensajes.filter(m => m.imagen).map(m => m.imagen);
-      if (fotos.length === 0) { cont.style.display = "none"; return; }
-      fotos.forEach((img, i) => {
-        const im = document.createElement("img");
-        im.src = img;
-        if (i === 0) im.classList.add("active");
-        cont.appendChild(im);
-      });
-      cont.style.display = "block";
-      if (intervaloCarrusel) clearInterval(intervaloCarrusel);
-      intervaloCarrusel = setInterval(() => moverCarrusel(1), 4000);
-    }
+      window.editarMensaje = function(id) {
+        const nuevo = prompt("Edita tu mensaje:");
+        if (nuevo) {
+          const i = mensajes.findIndex(m => m.id === id);
+          mensajes[i].mensaje = nuevo;
+          localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
+          mostrarMensajes();
+        }
+      };
 
-    function moverCarrusel(dir) {
-      const imgs = document.querySelectorAll(".carrusel img");
-      if (imgs.length === 0) return;
-      imgs[indiceCarrusel].classList.remove("active");
-      indiceCarrusel = (indiceCarrusel + dir + imgs.length) % imgs.length;
-      imgs[indiceCarrusel].classList.add("active");
-    }
+      window.borrarMensaje = function(id) {
+        if (confirm("¿Seguro que quieres borrar este mensaje?")) {
+          mensajes = mensajes.filter(m => m.id !== id);
+          localStorage.setItem("mensajesMelanny", JSON.stringify(mensajes));
+          mostrarMensajes();
+          actualizarCarrusel();
+        }
+      };
 
-    /* --- Corazones flotando --- */
-    function iniciarCorazones() {
-      setInterval(() => {
-        const corazon = document.createElement("div");
-        corazon.classList.add("corazon");
-        corazon.textContent = "💖";
-        corazon.style.left = Math.random() * 100 + "vw";
-        corazon.style.fontSize = (12 + Math.random() * 10) + "px";
-        document.body.appendChild(corazon);
-        setTimeout(() => corazon.remove(), 6000);
-      }, 400);
-    }
+      /* --- Carrusel --- */
+      let indiceCarrusel = 0;
+      let intervaloCarrusel;
 
-    window.onload = mostrarMensajes;
+      window.actualizarCarrusel = function() {
+        const cont = document.getElementById("carrusel");
+        cont.innerHTML = `<button class='flecha izq' onclick='moverCarrusel(-1)'>❮</button>
+                          <button class='flecha der' onclick='moverCarrusel(1)'>❯</button>`;
+        const fotos = mensajes.filter(m => m.imagen).map(m => m.imagen);
+        if (fotos.length === 0) { cont.style.display = "none"; return; }
+        fotos.forEach((img, i) => {
+          const im = document.createElement("img");
+          im.src = img;
+          if (i === 0) im.classList.add("active");
+          cont.appendChild(im);
+        });
+        cont.style.display = "block";
+        if (intervaloCarrusel) clearInterval(intervaloCarrusel);
+        intervaloCarrusel = setInterval(() => moverCarrusel(1), 4000);
+      };
+
+      window.moverCarrusel = function(dir) {
+        const imgs = document.querySelectorAll(".carrusel img");
+        if (imgs.length === 0) return;
+        imgs[indiceCarrusel].classList.remove("active");
+        indiceCarrusel = (indiceCarrusel + dir + imgs.length) % imgs.length;
+        imgs[indiceCarrusel].classList.add("active");
+      };
+
+      /* --- Corazones flotando --- */
+      window.iniciarCorazones = function() {
+        setInterval(() => {
+          const corazon = document.createElement("div");
+          corazon.classList.add("corazon");
+          corazon.textContent = "💖";
+          corazon.style.left = Math.random() * 100 + "vw";
+          corazon.style.fontSize = (12 + Math.random() * 10) + "px";
+          document.body.appendChild(corazon);
+          setTimeout(() => corazon.remove(), 6000);
+        }, 400);
+      };
+    });
   </script>
 </body>
 </html>
